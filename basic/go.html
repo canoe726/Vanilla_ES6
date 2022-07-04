@@ -1,0 +1,52 @@
+<html>
+  <head></head>
+  <body></body>
+
+  <script>
+    const products = [
+      15000, 20000, 25000, 30000, 35000,
+    ];
+
+    const reduce = (fn, acc, iter) => {
+      if (!iter) {
+        iter = acc[Symbol.iterator]();
+        acc = iter.next().value;
+      }
+      for (a of iter) {
+        acc = fn(acc, a);
+      }
+      return acc;
+    }
+
+    const add = (a, b) => a + b;
+    const log = (input) => console.log(input);
+
+    const go = (...args) => reduce((a, f) => f(a), args);
+
+    go(
+      add(0, 1),
+      a => a + 1,
+      a => a + 10,
+      a => a + 100,
+      log,
+    );
+
+    // const pipe = (...fs) => (a) => go(a, ...fs);
+    const pipe = (f, ...fs) => (...as) => go(f(...as), ...fs);
+
+    const f = pipe(
+      (a, b) => a + b,
+      a => a + 1,
+      a => a + 10,
+      a => a + 100,
+    );
+
+    log(f(0, 1));
+
+    go(
+      products,
+      products
+    )
+
+  </script>
+</html>
